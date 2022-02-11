@@ -24,17 +24,21 @@ class WalkRecordListScreen extends ConsumerWidget {
       );
     }
 
+    var addNum = (viewModel.hasNext) ? 1 : 0;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('walk record'),
       ),
       body: ListView.separated(
         controller: viewModel.scrollController,
-        itemCount: viewModel.walkRecordList.length + 1,
+        itemCount: viewModel.walkRecordList.length + addNum,
         separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
-          if (index == viewModel.walkRecordList.length) {
-            return const CupertinoActivityIndicator();
+          if (viewModel.hasNext) {
+            if (index == viewModel.walkRecordList.length) {
+              return const CupertinoActivityIndicator();
+            }
           }
 
           return ListTile(

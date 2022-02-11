@@ -13,8 +13,9 @@ final walkRecordViewModelProvider = ChangeNotifierProvider((ref) {
 class WalkRecordViewModel extends ChangeNotifier {
   // screenに渡す値
   bool isInitSuccess = false;
-  final List<Walk> walkRecordList = [];
+  final List<Datum> walkRecordList = [];
   final scrollController = ScrollController();
+  bool hasNext = true;
 
   // screenに渡さない値
   bool _isFetching = false;
@@ -58,9 +59,11 @@ class WalkRecordViewModel extends ChangeNotifier {
       if (response.statusCode == 200) {
         final walk = walkFromJson(response.body);
 
-        for (var data in walk) {
-          walkRecordList.add(data);
+        for (var value in walk.data) {
+          walkRecordList.add(value);
         }
+
+        hasNext = walk.hasNext;
 
         _pageNo++;
 

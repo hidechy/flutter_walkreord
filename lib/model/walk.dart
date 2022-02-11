@@ -4,14 +4,32 @@
 
 import 'dart:convert';
 
-List<Walk> walkFromJson(String str) =>
-    List<Walk>.from(json.decode(str).map((x) => Walk.fromJson(x)));
+Walk walkFromJson(String str) => Walk.fromJson(json.decode(str));
 
-String walkToJson(List<Walk> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String walkToJson(Walk data) => json.encode(data.toJson());
 
 class Walk {
   Walk({
+    required this.data,
+    required this.hasNext,
+  });
+
+  List<Datum> data;
+  bool hasNext;
+
+  factory Walk.fromJson(Map<String, dynamic> json) => Walk(
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        hasNext: json["hasNext"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "hasNext": hasNext,
+      };
+}
+
+class Datum {
+  Datum({
     required this.date,
     required this.step,
     required this.distance,
@@ -29,7 +47,7 @@ class Walk {
   String mercari;
   String train;
 
-  factory Walk.fromJson(Map<String, dynamic> json) => Walk(
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         date: DateTime.parse(json["date"]),
         step: json["step"],
         distance: json["distance"],
