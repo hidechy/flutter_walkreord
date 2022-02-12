@@ -6,6 +6,16 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart';
 
 class Utility {
+  /// 背景取得
+  Widget getBackGround({context}) {
+    return Image.asset(
+      'assets/images/walk.png',
+      fit: BoxFit.cover,
+      color: Colors.black.withOpacity(0.7),
+      colorBlendMode: BlendMode.darken,
+    );
+  }
+
   /// 日付データ作成
   late String year;
   late String month;

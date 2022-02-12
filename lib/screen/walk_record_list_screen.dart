@@ -35,96 +35,115 @@ class WalkRecordListScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('walk record'),
       ),
-      body: ListView.separated(
-        controller: viewModel.scrollController,
-        itemCount: viewModel.walkRecordList.length + addNum,
-        separatorBuilder: (context, index) => const SizedBox(height: 5),
-        itemBuilder: (context, index) {
-          if (viewModel.hasNext) {
-            if (index == viewModel.walkRecordList.length) {
-              return const CupertinoActivityIndicator();
-            }
-          }
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          _utility.getBackGround(),
+          ListView.separated(
+            controller: viewModel.scrollController,
+            itemCount: viewModel.walkRecordList.length + addNum,
+            separatorBuilder: (context, index) => const SizedBox(height: 5),
+            itemBuilder: (context, index) {
+              if (viewModel.hasNext) {
+                if (index == viewModel.walkRecordList.length) {
+                  return const CupertinoActivityIndicator();
+                }
+              }
 
-          _utility.makeYMDYData(
-              viewModel.walkRecordList[index].date.toString(), 0);
-          var dispDate = '${_utility.year}-${_utility.month}-${_utility.day}';
+              _utility.makeYMDYData(
+                  viewModel.walkRecordList[index].date.toString(), 0);
+              var dispDate =
+                  '${_utility.year}-${_utility.month}-${_utility.day}';
 
-          var step = _utility.makeCurrencyDisplay(
-              viewModel.walkRecordList[index].step.toString());
+              var step = _utility.makeCurrencyDisplay(
+                  viewModel.walkRecordList[index].step.toString());
 
-          var distance = _utility.makeCurrencyDisplay(
-              viewModel.walkRecordList[index].distance.toString());
+              var distance = _utility.makeCurrencyDisplay(
+                  viewModel.walkRecordList[index].distance.toString());
 
-          return Card(
-            color: _utility.getBgColor(dispDate, viewModel2.holidayList),
-            child: ListTile(
-              title: DefaultTextStyle(
-                style: TextStyle(fontSize: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Table(
+              return Card(
+                color: _utility.getBgColor(dispDate, viewModel2.holidayList),
+                child: ListTile(
+                  title: DefaultTextStyle(
+                    style: TextStyle(fontSize: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TableRow(
+                        Table(
                           children: [
-                            Text('${dispDate}（${_utility.youbiStr}）'),
-                            Container(
-                              alignment: Alignment.topRight,
-                              child: Text('${step} step.'),
-                            ),
-                            Container(
-                              alignment: Alignment.topRight,
-                              child: Text('${distance} m'),
+                            TableRow(
+                              children: [
+                                Text('${dispDate}（${_utility.youbiStr}）'),
+                                Container(
+                                  alignment: Alignment.topRight,
+                                  child: Text('${step} step.'),
+                                ),
+                                Container(
+                                  alignment: Alignment.topRight,
+                                  child: Text('${distance} m'),
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        Container(
+                          alignment: Alignment.topRight,
+                          child: Text(viewModel.walkRecordList[index].spend),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(child: Text('timeplace'), flex: 1),
+                            Expanded(
+                                child: Text(
+                                    viewModel.walkRecordList[index].timeplace),
+                                flex: 3),
+                          ],
+                        ),
+                        (viewModel.walkRecordList[index].temple != '')
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(child: Text('temple'), flex: 1),
+                                  Expanded(
+                                      child: Text(viewModel
+                                          .walkRecordList[index].temple),
+                                      flex: 3),
+                                ],
+                              )
+                            : Container(),
+                        (viewModel.walkRecordList[index].mercari != '')
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(child: Text('mercari'), flex: 1),
+                                  Expanded(
+                                      child: Text(viewModel
+                                          .walkRecordList[index].mercari),
+                                      flex: 3),
+                                ],
+                              )
+                            : Container(),
+                        (viewModel.walkRecordList[index].train != '')
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(child: Text('train'), flex: 1),
+                                  Expanded(
+                                      child: Text(viewModel
+                                          .walkRecordList[index].train),
+                                      flex: 3),
+                                ],
+                              )
+                            : Container(),
                       ],
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: Text('timeplace'), flex: 1),
-                        Expanded(
-                            child:
-                                Text(viewModel.walkRecordList[index].timeplace),
-                            flex: 3),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: Text('temple'), flex: 1),
-                        Expanded(
-                            child: Text(viewModel.walkRecordList[index].temple),
-                            flex: 3),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: Text('mercari'), flex: 1),
-                        Expanded(
-                            child:
-                                Text(viewModel.walkRecordList[index].mercari),
-                            flex: 3),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: Text('train'), flex: 1),
-                        Expanded(
-                            child: Text(viewModel.walkRecordList[index].train),
-                            flex: 3),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ],
       ),
     );
   }

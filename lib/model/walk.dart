@@ -29,15 +29,15 @@ class Walk {
 }
 
 class Datum {
-  Datum({
-    required this.date,
-    required this.step,
-    required this.distance,
-    required this.timeplace,
-    required this.temple,
-    required this.mercari,
-    required this.train,
-  });
+  Datum(
+      {required this.date,
+      required this.step,
+      required this.distance,
+      required this.timeplace,
+      required this.temple,
+      required this.mercari,
+      required this.train,
+      required this.spend});
 
   DateTime date;
   int step;
@@ -46,6 +46,7 @@ class Datum {
   String temple;
   String mercari;
   String train;
+  String spend;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         date: DateTime.parse(json["date"]),
@@ -55,6 +56,7 @@ class Datum {
         temple: json["temple"],
         mercari: json["mercari"],
         train: json["train"],
+        spend: json["spend"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +68,6 @@ class Datum {
         "temple": temple,
         "mercari": mercari,
         "train": train,
+        "spend": spend,
       };
 }
