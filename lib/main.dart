@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'WalkRecord',
       theme: ThemeData.dark(),
-      home: const WalkRecordListScreen(),
+      home: WalkRecordListScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

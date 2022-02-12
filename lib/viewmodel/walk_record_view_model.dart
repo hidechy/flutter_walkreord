@@ -87,3 +87,25 @@ class WalkRecordViewModel extends ChangeNotifier {
     super.dispose();
   }
 }
+
+///
+final holidayViewModelProvider = ChangeNotifierProvider((ref) {
+  return HolidayViewModel()..initialize();
+});
+
+///
+class HolidayViewModel extends ChangeNotifier {
+  Map<String, dynamic> holidayList = {};
+
+  Future<void> initialize() async {
+    String url = "http://toyohide.work/BrainLog/api/getholiday";
+    Map<String, String> headers = {'content-type': 'application/json'};
+    Response response = await post(Uri.parse(url), headers: headers);
+    Map HolidayOfAll = (response != null) ? jsonDecode(response.body) : null;
+    if (HolidayOfAll != null) {
+      for (var i = 0; i < HolidayOfAll['data'].length; i++) {
+        holidayList[HolidayOfAll['data'][i]] = '';
+      }
+    }
+  }
+}

@@ -4,12 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../viewmodel/walk_record_view_model.dart';
 
+import '../utility/utility.dart';
+
 class WalkRecordListScreen extends ConsumerWidget {
-  const WalkRecordListScreen({Key? key}) : super(key: key);
+  WalkRecordListScreen({Key? key}) : super(key: key);
+
+  Utility _utility = Utility();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(walkRecordViewModelProvider);
+    final viewModel2 = ref.watch(holidayViewModelProvider);
 
     // Initが完了するまで
     if (!viewModel.isInitSuccess) {
@@ -33,7 +38,7 @@ class WalkRecordListScreen extends ConsumerWidget {
       body: ListView.separated(
         controller: viewModel.scrollController,
         itemCount: viewModel.walkRecordList.length + addNum,
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        separatorBuilder: (context, index) => const SizedBox(height: 5),
         itemBuilder: (context, index) {
           if (viewModel.hasNext) {
             if (index == viewModel.walkRecordList.length) {
@@ -41,8 +46,83 @@ class WalkRecordListScreen extends ConsumerWidget {
             }
           }
 
-          return ListTile(
-            title: Text(viewModel.walkRecordList[index].date.toString()),
+          _utility.makeYMDYData(
+              viewModel.walkRecordList[index].date.toString(), 0);
+          var dispDate = '${_utility.year}-${_utility.month}-${_utility.day}';
+
+          var step = _utility.makeCurrencyDisplay(
+              viewModel.walkRecordList[index].step.toString());
+
+          var distance = _utility.makeCurrencyDisplay(
+              viewModel.walkRecordList[index].distance.toString());
+
+          return Card(
+            color: _utility.getBgColor(dispDate, viewModel2.holidayList),
+            child: ListTile(
+              title: DefaultTextStyle(
+                style: TextStyle(fontSize: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Table(
+                      children: [
+                        TableRow(
+                          children: [
+                            Text('${dispDate}（${_utility.youbiStr}）'),
+                            Container(
+                              alignment: Alignment.topRight,
+                              child: Text('${step} step.'),
+                            ),
+                            Container(
+                              alignment: Alignment.topRight,
+                              child: Text('${distance} m'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: Text('timeplace'), flex: 1),
+                        Expanded(
+                            child:
+                                Text(viewModel.walkRecordList[index].timeplace),
+                            flex: 3),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: Text('temple'), flex: 1),
+                        Expanded(
+                            child: Text(viewModel.walkRecordList[index].temple),
+                            flex: 3),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: Text('mercari'), flex: 1),
+                        Expanded(
+                            child:
+                                Text(viewModel.walkRecordList[index].mercari),
+                            flex: 3),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: Text('train'), flex: 1),
+                        Expanded(
+                            child: Text(viewModel.walkRecordList[index].train),
+                            flex: 3),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         },
       ),
